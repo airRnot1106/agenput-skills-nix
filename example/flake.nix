@@ -4,12 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    nput.url = "github:yasunori0418/nput";
-
-    agenput-skills = {
-      url = "github:airRnot1106/agenput-skills-nix";
-      inputs.nput.follows = "nput";
-    };
+    agenput-skills.url = "github:airRnot1106/agenput-skills-nix";
 
     anthropic-skills = {
       url = "github:anthropics/skills";
@@ -21,7 +16,6 @@
     {
       self,
       nixpkgs,
-      nput,
       agenput-skills,
       anthropic-skills,
       ...
@@ -61,7 +55,7 @@
         {
           skills-claude = agenput-skills.lib.mkSkillsManifest {
             inherit pkgs skills;
-            root = nput.lib.projectRoot;
+            root = agenput-skills.lib.projectRoot;
             prefix = agenput-skills.lib.presets.claude.project;
           };
         }

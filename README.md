@@ -15,6 +15,8 @@ see [`example/`](example/).
   `skills = [ { name; src; subpath ? "."; method ? "symlink"; } ]`.
 - `mkSkillsDevShell { pkgs, names }` — devShell fragment. `shellHook` runs
   `nput apply <name> --no-wait` per name. Compose via `inputsFrom`.
+- `projectRoot` / `homeRoot` / `mkOutOfStoreSymlink` — re-exported from
+  `nput.lib`, so consumers don't need `nput` as a direct flake input.
 
 ## Acknowledgements
 
