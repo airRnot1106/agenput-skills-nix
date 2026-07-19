@@ -5,6 +5,6 @@
   names,
 }:
 pkgs.mkShellNoCC {
-  packages = [ nput.packages.${pkgs.system}.nput ];
+  packages = [ nput.packages.${pkgs.stdenv.hostPlatform.system}.nput ];
   shellHook = builtins.concatStringsSep "\n" (map (name: "nput apply ${name} --no-wait") names);
 }
