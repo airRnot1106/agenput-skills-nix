@@ -4,7 +4,9 @@ Thin [nput](https://github.com/yasunori0418/nput) wrapper for placing agent skil
 
 ## Usage
 
-see [`example/`](example/).
+See [`example/`](example/).
+
+For a more practical example, please see [my dotfiles](https://github.com/airRnot1106/dotfiles/blob/4575aee3bc122b3daf69939ae273b8e17783080f/nix/agent-skills/flake.nix).
 
 ## `lib`
 
