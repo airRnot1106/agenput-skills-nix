@@ -1,5 +1,5 @@
 {
-  description = "agenput-skills-nix example: place skills from anthropics/skills for Claude Code";
+  description = "agenput-skills-nix example: place skills from anthropics/skills for Claude Code and Codex";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -14,69 +14,43 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       agenput-skills,
       anthropic-skills,
       ...
     }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      inherit (nixpkgs) lib;
+      inherit (agenput-skills.lib) presets;
 
-      skills = [
-        {
-          name = "pdf";
-          src = anthropic-skills;
-          subpath = "skills/pdf";
-        }
-        {
-          name = "docx";
-          src = anthropic-skills;
-          subpath = "skills/docx";
-        }
-        {
-          name = "xlsx";
-          src = anthropic-skills;
-          subpath = "skills/xlsx";
-        }
-      ];
-    in
-    {
-      layat = forAllSystems (
+      skills = lib.genAttrs [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ] (
         system:
-        let
+        agenput-skills.lib.mkSkills {
           pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          skills-claude = agenput-skills.lib.mkSkillsManifest {
-            inherit pkgs skills;
-            root = agenput-skills.lib.projectRoot;
-            prefix = agenput-skills.lib.presets.claude.project;
-          };
-        }
-      );
-
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default = pkgs.mkShellNoCC {
-            inputsFrom = [
-              (agenput-skills.lib.mkSkillsDevShell {
-                inherit pkgs;
-                # For names, specify the manifest name defined in layat.${system} (e.g., skills-claude).
-                names = builtins.attrNames self.layat.${system};
-              })
+          sets.agent-skills = {
+            scope = "project";
+            paths = [
+              presets.claude.project
+              presets.codex.project
+            ];
+            sources = [
+              {
+                src = anthropic-skills;
+                dir = "skills";
+                skills = [
+                  "pdf"
+                  "docx"
+                  "xlsx"
+                ];
+              }
             ];
           };
         }
       );
+    in
+    {
+      layat = lib.mapAttrs (_: s: s.layat) skills;
+
+      devShells = lib.mapAttrs (_: s: { default = s.devShell; }) skills;
     };
 }

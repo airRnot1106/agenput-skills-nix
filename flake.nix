@@ -15,8 +15,42 @@
   };
 
   outputs =
-    { layat, ... }:
+    { self, layat, ... }:
+    let
+      inherit (layat.inputs) nixpkgs;
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    in
     {
       lib = import ./lib { inherit layat; };
+
+      checks = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          failed = import ./tests {
+            inherit pkgs;
+            agenput = self.lib;
+          };
+        in
+        {
+          tests =
+            if failed == [ ] then
+              pkgs.runCommandLocal "agenput-skills-tests" { } "touch $out"
+            else
+              throw "agenput-skills tests failed:\n${nixpkgs.lib.concatStringsSep "\n" failed}";
+
+          formatting =
+            pkgs.runCommandLocal "agenput-skills-formatting" { nativeBuildInputs = [ pkgs.nixfmt ]; }
+              ''
+                nixfmt --check ${./flake.nix} ${./lib}/*.nix ${./tests/default.nix} ${./example/flake.nix}
+                touch $out
+              '';
+        }
+      );
     };
 }
