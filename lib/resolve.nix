@@ -124,7 +124,9 @@ let
         if builtins.pathExists "${source.src}/${skill.subpath}/SKILL.md" then
           skill
         else
-          throw "${ctx}: no SKILL.md at '${skill.subpath}'";
+          throw "${ctx}: no SKILL.md at ${
+            if skill.subpath == "" then "the source root" else "'${skill.subpath}'"
+          }";
     in
     if source.skills == "all" then
       if index == { } then
