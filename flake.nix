@@ -11,12 +11,12 @@
   };
 
   inputs = {
-    nput.url = "github:yasunori0418/nput";
+    layat.url = "github:yasunori0418/layat";
   };
 
   outputs =
-    { nput, ... }:
+    { layat, ... }:
     {
-      lib = import ./lib { inherit nput; };
+      lib = import ./lib { inherit layat; };
     };
 }

@@ -47,7 +47,7 @@
       ];
     in
     {
-      nput = forAllSystems (
+      layat = forAllSystems (
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
@@ -71,8 +71,8 @@
             inputsFrom = [
               (agenput-skills.lib.mkSkillsDevShell {
                 inherit pkgs;
-                # For names, specify the manifest name defined in nput.${system} (e.g., skills-claude).
-                names = builtins.attrNames self.nput.${system};
+                # For names, specify the manifest name defined in layat.${system} (e.g., skills-claude).
+                names = builtins.attrNames self.layat.${system};
               })
             ];
           };

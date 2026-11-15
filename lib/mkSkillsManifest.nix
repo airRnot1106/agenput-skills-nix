@@ -1,15 +1,15 @@
-{ nput }:
+{ layat }:
 {
-  # nixpkgs package set for the target system, forwarded to `nput.lib.mkManifest`.
+  # nixpkgs package set for the target system, forwarded to `layat.lib.mkManifest`.
   pkgs,
-  # `nput.lib.projectRoot` or `nput.lib.homeRoot`.
+  # `layat.lib.projectRoot` or `layat.lib.homeRoot`.
   root,
   # A target path prefix, e.g. `presets.claude.project`.
   prefix,
   # `[ { name; src; subpath ? "."; method ? "symlink"; } ... ]`.
   skills,
 }:
-nput.lib.mkManifest {
+layat.lib.mkManifest {
   inherit pkgs root;
   entries = builtins.listToAttrs (
     map (skill: {
