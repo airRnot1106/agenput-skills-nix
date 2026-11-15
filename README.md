@@ -1,6 +1,6 @@
 # agenput-skills-nix
 
-Place agent skills with [layat](https://github.com/yasunori0418/layat). Specify the skills you want, and the library will locate each one in its source and symlink it to your target directories.
+Place agent skills with [layat](https://github.com/yasunori0418/layat) (formerly known as **nput**). Specify the skills you want, and the library will locate each one in its source and symlink it to your target directories.
 
 ## Usage
 
